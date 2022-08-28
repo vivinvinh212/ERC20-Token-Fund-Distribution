@@ -6,14 +6,19 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./IUser.sol";
 
 contract User is IUser, Ownable {
-    event AllocationSet(address[] recipients, uint8[] allocations);
+    event AllocationSet(uint8[] allocations, address[] recipients);
 
-    string public purpose = "Building Unstoppable Apps!!!";
-    uint8[] allocations;
-    address[] recipients;
-    mapping(address => uint8) allocationPerAddress;
+    uint8[] private allocations;
+    address[] private recipients;
 
-    constructor() payable {}
+    constructor(
+        address newOwner,
+        uint8[] memory _allocations,
+        address[] memory _recipients
+    ) {
+        setAllocations(_allocations, _recipients);
+        transferOwnership(newOwner);
+    }
 
     function getRecipients() public view returns (address[] memory) {
         return recipients;
@@ -39,9 +44,13 @@ contract User is IUser, Ownable {
             _allocations.length == recipients.length,
             "Length of two sequences do not match!"
         );
-        for (uint i = 0; i < _recipients.length; i++) {
-            allocationPerAddress[_recipients[i]] = _allocations[i];
-        }
+        // uint allocationsAccumulated = 0;
+        // for (uint i = 0; i < _recipients.length; i++) {
+        //     allocationPerAddress[_recipients[i]] = _allocations[i];
+        //     allocationsAccumulated += _allocations[i];
+        // }
+        // totalAllocations += allocationsAccumulated;
+        emit AllocationSet(_allocations, _recipients);
     }
 
     function getRecipientsLength() public view returns (uint) {
