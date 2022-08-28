@@ -11,6 +11,7 @@ contract User is IUser, Ownable {
     string public purpose = "Building Unstoppable Apps!!!";
     uint8[] allocations;
     address[] recipients;
+    mapping(address => uint8) allocationPerAddress;
 
     constructor() payable {}
 
@@ -23,7 +24,7 @@ contract User is IUser, Ownable {
     }
 
     function setAllocations(
-        uint8[] memory _ratios,
+        uint8[] memory _allocations,
         address[] memory _recipients
     ) public onlyOwner {
         require(
@@ -31,13 +32,16 @@ contract User is IUser, Ownable {
             "Recipients length is not appropriate"
         );
         require(
-            0 <= _ratios.length && _ratios.length <= 256,
-            "Ratios length is not appropriate"
+            0 <= _allocations.length && _allocations.length <= 256,
+            "Allocation length is not appropriate"
         );
         require(
-            _ratios.length == recipients.length,
+            _allocations.length == recipients.length,
             "Length of two sequences do not match!"
         );
+        for (uint i = 0; i < _recipients.length; i++) {
+            allocationPerAddress[_recipients[i]] = _allocations[i];
+        }
     }
 
     function getRecipientsLength() public view returns (uint) {
