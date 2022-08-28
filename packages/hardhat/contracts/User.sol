@@ -9,6 +9,8 @@ contract User is IUser, Ownable {
     event AllocationSet(address[] recipients, uint8[] allocations);
 
     string public purpose = "Building Unstoppable Apps!!!";
+    uint8[] ratios;
+    address[] recipients;
 
     constructor() payable {}
 
@@ -16,7 +18,10 @@ contract User is IUser, Ownable {
 
     function getAllocations() public view returns (uint8[] memory) {}
 
-    function setAllocations() public onlyOwner {}
+    function setAllocations(
+        uint8[] memory _ratios,
+        address[] memory _recipients
+    ) public onlyOwner {}
 
     function getRecipientsLength() public view returns (uint) {}
 
