@@ -20,18 +20,18 @@ contract User is IUser, Ownable {
         transferOwnership(newOwner);
     }
 
-    function getRecipients() public view returns (address[] memory) {
+    function getRecipients() public view override returns (address[] memory) {
         return recipients;
     }
 
-    function getAllocations() public view returns (uint8[] memory) {
+    function getAllocations() public view override returns (uint8[] memory) {
         return allocations;
     }
 
     function setAllocations(
         uint8[] memory _allocations,
         address[] memory _recipients
-    ) public onlyOwner {
+    ) public override onlyOwner {
         require(
             0 <= _recipients.length && _recipients.length <= 256,
             "Recipients length is not appropriate"
@@ -53,12 +53,12 @@ contract User is IUser, Ownable {
         emit AllocationSet(_allocations, _recipients);
     }
 
-    function getRecipientsLength() public view returns (uint) {
+    function getRecipientsLength() public view override returns (uint) {
         return recipients.length;
     }
 
     // to support receiving ETH by default
-    receive() external payable {}
+    receive() external payable override {}
 
-    fallback() external payable {}
+    fallback() external payable override {}
 }
